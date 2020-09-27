@@ -1,2 +1,2 @@
-# programming_in_fortran
+# Programming in Fortran
 Задания с семинаров по вычислительным и информационным технологиям, 4 курс СПБГУ ФФ
