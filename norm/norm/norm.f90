@@ -1,10 +1,10 @@
 program my_program
-!    use blas95
-!    use f95_precision
     implicit none
-    
-    real(8) :: v(100000)
-    real :: t1, t2
+     
+    integer :: n
+    real(8), allocatable :: v(:)
+    real(8) :: t1, t2
+    real(8) :: dnrm2
     
     interface
         real(8) function norm(n, x)
@@ -13,18 +13,24 @@ program my_program
         end function norm
     end interface
     
+    print *, "Enter n:"
+    read(*,*) n
+    
+    allocate(v(n))
     v(:) = 8
 
     
     call cpu_time(t1)
-    print *, 'Vector norm = ', norm(100000, v)
+    print *, 'Vector norm = ', norm(n, v)
     call cpu_time(t2)
     print *, t2 - t1, " sec"
     
-!    call cpu_time(t1)
-!    print *, 'Vector norm by dnrm2 = ', dnrm2(100, v, 1)
-!    call cpu_time(t2)
-!    print *, t2 - t1, " sec"
+    call cpu_time(t1)
+    print *, 'Vector norm by dnrm2 = ', dnrm2(n, v, 1)
+    call cpu_time(t2)
+    print *, t2 - t1, " sec"
+    
+    deallocate(v)
     
     read(*,*)
 end program my_program
@@ -35,16 +41,13 @@ real(8) function norm(n, x)
     
     integer, intent(in) :: n
     real(8), intent(in) :: x(n)
-    real(8) :: a(n)
     real(8) :: sum
     integer :: i
     
-    
     sum = 0
-    a = x**2
     
     do i=1,n
-        sum = sum + a(i)
+        sum = sum + x(i)*x(i)
     end do
     
     norm = sqrt(sum)
